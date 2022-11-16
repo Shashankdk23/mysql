@@ -71,3 +71,32 @@ where damage_amount>(select t.amt from(select avg(damage_amount)amt from partici
 select p.name,c.model,pt.damage_amount,a.location
 from participated pt,car c,accident a,person p
 where a.location='Mysore Road' and p.driver_id=pt.driver_id and c.reg_no=pt.reg_no and pt.report_no=a.report_no;
+
+Out put of todo list
+query 1
+driver_id	reg_no	report_no	damage_amount
+A02	KA053408	12	50000
+A03	KA095477	13	25000
+A01	KA052250	11	10000
+A05	KA041702	15	5000
+A04	KA031181	14	3000
+
+query 2
+avg(damage_amount)
+18600.0000
+
+query 3
+driver_id,reg_no,report_no,damage_amount
+A02,KA053408,12,50000
+A03,KA095477,13,25000
+
+query 5
+max(damage_amount)
+50000
+
+
+spot query
+
+name,model,damage_amount,location
+Richard,Indica,10000,"Mysore Road"
+Venu,Lancer,3000,"Mysore Road"
