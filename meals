@@ -1,0 +1,101 @@
+create database meals;
+use meals;
+create table customer(
+c_id varchar(10) primary key,
+cname char(40),
+cemail char(40),
+cph_no double);
+create table hotel(
+h_id varchar(10) primary key,
+hname char(40),
+hph_no double,
+hstreet char(40),
+hlocality char(40));
+create table driver(
+d_id varchar(10) primary key,
+dname char(40),
+dph_no double,
+dsal int);
+create table menu (
+item_id varchar(5) ,
+item_name char(30),
+unit_prize int,
+h_id varchar(10),
+foreign key(h_id) references hotel(h_id) on update cascade on delete cascade,
+primary key(item_id,h_id));
+
+create table orders(
+o_id varchar(10) primary key,
+item_name char(30),
+dilevery_charge int,
+o_time time,
+total_prize int,
+h_id varchar(10),
+ item_id varchar(5),
+ d_id varchar(10),
+ c_id varchar(10),
+foreign key(h_id) references hotel(h_id) on update cascade on delete cascade,
+foreign key(d_id) references driver(d_id) on update cascade on delete cascade,
+foreign key(item_id) references menu(item_id) on update cascade on delete cascade,
+foreign key(c_id) references customer(c_id) on update cascade on delete cascade);
+create  table c_adress
+(
+c_id varchar(10) primary key,
+clocality char(40),
+c_houseno int,
+cstreet char(40));
+create table rating(
+o_id varchar(10) primary key,
+star int, check(star>=0 and star<6),
+remark char(100),
+foreign key(o_id) references orders(o_id) on update cascade on delete cascade
+);
+create table delivery_details(
+o_id varchar(10) primary key,
+mop char(20),
+time_of_delivery time,
+foreign key(o_id) references orders(o_id) on update cascade on delete cascade
+);
+insert into customer values(7,'shashank','shashi@gmail.com',7022615850),
+(8,'akshanth','akshant@gamil.com',9901645232),
+(6,'abijit','abi@gmail.com',9852364100);
+select *from customer;
+insert into hotel values(1,'vijaya_in','8120364559','bull_temple','basavangudi'),
+(2,'iyangar','8836125970','kr_road','shankarpurum'),
+(3,'utar_karnataka','7023689451','gandi_bazar','basavangudi');
+select *from hotel;
+insert into driver values(53,'veerash','9004873615',15000),
+(54,'bhadra','746589324',9000),
+(55,'prajwal',8923561407,11000);
+select *from driver;
+insert into menu values(23,'dosa',65,1),
+(20,'dosa',60,2),(25,'pizza',102,1),(23,'full_meals',200,2),
+(20,'uk_meals',156,3),(21,'idli',35,3),(23,'handi_biryani',230,3);
+select *from menu;
+insert into orders values(125,'pizza','26','11:25:00',128,1,25,55,8),
+(126,'idli','30','11:30:00',65,3,21,55,8),
+(129,'full_meals','35','13:30:00',235,3,23,55,8),
+(127,'dosa','60','13:30:00',120,2,20,53,7),
+(128,'handi_biryani','47','14:30:00',277,3,23,54,6);
+select *from orders;
+insert into rating values(125,3,'can imprive quality'),
+(126,4,null),(129,4,null),(128,5,'fantastic');
+select *from rating;
+
+
+select d_id,sum(total_prize)
+from orders
+group by d_id
+having max(*);
+       
+
+create view best
+as select item
+   from orders,rating
+   where ;
+update customer
+set cname='Avinash'
+where c_id=(
+select c_id
+from customer c,rating r
+where count(*)>=2 and r.c_id=c.c_id);
